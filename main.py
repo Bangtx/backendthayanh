@@ -10,8 +10,8 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
-    "https://backendthayanh.herokuapp.com/",
-    "https://60f976f0aa073e00077dd0ee--blissful-raman-3e0f9c.netlify.app/#/",
+    "https://backendthayanh.herokuapp.com",
+    "https://60f976f0aa073e00077dd0ee--blissful-raman-3e0f9c.netlify.app",
 ]
 
 app.add_middleware(
