@@ -10,10 +10,7 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 origins = [
-    "http://localhost.tiangolo.com",
-    "https://localhost.tiangolo.com",
-    "http://localhost",
-    "http://localhost:8080",
+    "https://backendthayanh.herokuapp.com/",
     "https://60f976f0aa073e00077dd0ee--blissful-raman-3e0f9c.netlify.app/#/",
 ]
 
