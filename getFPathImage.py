@@ -37,6 +37,12 @@ class database:
                 `user` INTEGER NOT NULL,
                 `point` INTEGER NOT NULL
                 )""",
+            """CREATE TABLE IF NOT EXISTS `point_detail` (
+                 `id` INTEGER PRIMARY KEY,
+                `user` INTEGER NOT NULL,
+                `point` INTEGER NOT NULL
+                `point_detail` INTEGER NOT NULL
+                )""",
             """CREATE TABLE IF NOT EXISTS `result` (
                 `id` INTEGER PRIMARY KEY,
                 `user` INTEGER NOT NULL,
@@ -115,6 +121,7 @@ class database:
         sql = f"""SELECT * FROM `{table_name}` WHERE `id` = {id}"""
         cursor.execute(sql)
         result = cursor.fetchall()
+        print(result, 'xxx')
         return result
 
     def insert_one_row(self, table_name, **kwargs):

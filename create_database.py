@@ -95,3 +95,4 @@ if __name__ == '__main__':
     begin()
     get_data()
     db.insert_one_row('account', username=20160320, password='1')
+    db.insert_one_row('point', user=1, point=0)
