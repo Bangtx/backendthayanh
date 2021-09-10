@@ -35,8 +35,18 @@ def check_ans_and_update_row(id_student, result_student, id_question):
     point = int(get_point(id_student))
     if result_student == answer:
         point += 1
-    print(point)
-    db.update_one_row_by_fields('point', 'user', 1, point=point)
+    db.update_one_row_by_field('point', 'user', 1, point=point)
+    list_result = db.select_one_by_fields('point_detail', 'user', 1)
+    id_topic = db.select_one('question', id_question)[0][2]
+    if have_topic_field_in_result(list_result, id_topic):
+        db.update_one_row_two_fields('point_detail', 'user', 1, 'detail', id_topic, point=point)
+
+
+def have_topic_field_in_result(list_result, id_topic):
+    for i in list_result:
+        if i[-1] == id_topic:
+            return True
+    return False
 
 
 def check_user_and_pass(user, passw):

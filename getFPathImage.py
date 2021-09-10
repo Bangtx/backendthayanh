@@ -1,24 +1,4 @@
 import os, sqlite3
-from builtins import type, str
-from typing import re
-
-
-# cursor = db.cursor()
-# sql = """CREATE TABLE IF NOT EXISTS `subject` (
-#             id INTEGER PRIMARY KEY,
-#             subject TEXT NOT NULL
-#             )"""
-# cursor.execute(sql)
-# sql = """CREATE TABLE IF NOT EXISTS `topic` (
-#             id INTEGER PRIMARY KEY,
-#             topic TEXT NOT NULL
-#             )"""
-# cursor.execute(sql)
-# sql = """CREATE TABLE IF NOT EXISTS `document` (
-#             id INTEGER PRIMARY KEY,
-#             document TEXT NOT NULL
-#             )"""
-# cursor.execute(sql)
 
 
 class database:
@@ -38,10 +18,10 @@ class database:
                 `point` INTEGER NOT NULL
                 )""",
             """CREATE TABLE IF NOT EXISTS `point_detail` (
-                 `id` INTEGER PRIMARY KEY,
+                `id` INTEGER PRIMARY KEY,
                 `user` INTEGER NOT NULL,
-                `point` INTEGER NOT NULL
-                `point_detail` INTEGER NOT NULL
+                `point` INTEGER NOT NULL,
+                `detail` INTEGER NOT NULL
                 )""",
             """CREATE TABLE IF NOT EXISTS `result` (
                 `id` INTEGER PRIMARY KEY,
@@ -50,12 +30,12 @@ class database:
                 `result` TEXT NOT NULL
                 )""",
             """CREATE TABLE IF NOT EXISTS `subject` (
-                    `id` INTEGER PRIMARY KEY,
-                    `subject` TEXT NOT NULL)""",
+                `id` INTEGER PRIMARY KEY,
+                `subject` TEXT NOT NULL)""",
             """CREATE TABLE IF NOT EXISTS `topic` (
-                    `id` INTEGER PRIMARY KEY,
-                    `topic` TEXT NOT NULL
-                    )""",
+                `id` INTEGER PRIMARY KEY,
+                `topic` TEXT NOT NULL
+                )""",
             """CREATE TABLE IF NOT EXISTS `document` (
                 `id` INTEGER PRIMARY KEY,
                 `document` TEXT NOT NULL
@@ -110,7 +90,6 @@ class database:
 
     def select_one_by_fields(self, table_name, key, value):
         cursor = self.db.cursor()
-        print(key, value)
         sql = f"""SELECT * FROM `{table_name}` WHERE `{key}` = {value}"""
         cursor.execute(sql)
         result = cursor.fetchall()
@@ -121,7 +100,6 @@ class database:
         sql = f"""SELECT * FROM `{table_name}` WHERE `id` = {id}"""
         cursor.execute(sql)
         result = cursor.fetchall()
-        print(result, 'xxx')
         return result
 
     def insert_one_row(self, table_name, **kwargs):
@@ -143,7 +121,7 @@ class database:
         cursor.execute(sql)
         self.db.commit()
 
-    def update_one_row_by_fields(self, table_name, key, value, **kwargs):
+    def update_one_row_by_field(self, table_name, key, value, **kwargs):
         cursor = self.db.cursor()
         update = ''
         i = 1
@@ -155,6 +133,21 @@ class database:
             i += 1
 
         sql = f'UPDATE `{table_name}` SET  {update} WHERE  `{key}` = {value} '
+        cursor.execute(sql)
+        self.db.commit()
+
+    def update_one_row_two_fields(self, table_name, key1, value1, key2, value2, **kwargs):
+        cursor = self.db.cursor()
+        update = ''
+        i = 1
+        for k, v in kwargs.items():
+            if i < len(kwargs):
+                update += f'`{k}` = {v},  '
+            else:
+                update += f'`{k}` = {v}'
+            i += 1
+
+        sql = f'UPDATE `{table_name}` SET  {update} WHERE  `{key1}` = {value1} AND `{key2}` = {value2}'
         print(sql)
         cursor.execute(sql)
         self.db.commit()
