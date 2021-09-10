@@ -17,12 +17,6 @@ class database:
                 `user` INTEGER NOT NULL,
                 `point` INTEGER NOT NULL
                 )""",
-            """CREATE TABLE IF NOT EXISTS `point_detail` (
-                `id` INTEGER PRIMARY KEY,
-                `user` INTEGER NOT NULL,
-                `point` INTEGER NOT NULL,
-                `detail` INTEGER NOT NULL
-                )""",
             """CREATE TABLE IF NOT EXISTS `result` (
                 `id` INTEGER PRIMARY KEY,
                 `user` INTEGER NOT NULL,
@@ -148,6 +142,15 @@ class database:
             i += 1
 
         sql = f'UPDATE `{table_name}` SET  {update} WHERE  `{key1}` = {value1} AND `{key2}` = {value2}'
+        cursor.execute(sql)
+        self.db.commit()
+
+    def create_point_detail(self, list_topic):
+        cursor = self.db.cursor()
+        create = ''
+        for i in list_topic:
+            create += f'`topic_{i}` INTEGER, '
+        sql = f"CREATE TABLE IF NOT EXISTS `point_detail` ( {create}`id` INTEGER PRIMARY KEY, `user` INTEGER NOT NULL)"
         print(sql)
         cursor.execute(sql)
         self.db.commit()
@@ -180,7 +183,6 @@ def clear_duplicate(list_data):
 def get_list_doc(list_data):
     result = list()
     for data in list_data:
-        print(is_file(data), is_question(data))
         if not is_file(data):
             result.append(data)
     return result
@@ -189,7 +191,6 @@ def get_list_doc(list_data):
 def is_multi_choice(name):
     if len(name) == 11:
         if name[name.index('.png') - 1: name.index('.png')] != '_':
-            print(name[name.index('.png') - 1: name.index('.png')])
             return True
     return False
 

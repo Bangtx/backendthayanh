@@ -33,6 +33,10 @@ def get_data():
     list_subject = db.select_all('subject')
     list_topic = db.select_all('topic')
     list_doc = db.select_all('document')
+    list_topic_id = list()
+    for i in list_topic:
+        list_topic_id.append(i[0])
+    db.create_point_detail(list_topic_id)
 
     list_question_id = list()
     for subjec in list_subject:
@@ -56,17 +60,13 @@ def get_data():
                         )
 
                     if not is_file(doc_and_file):
-                        print('????', list_doc)
                         for i in list_doc:
                             if doc_and_file == i[1]:
                                 doc_and_file = i[1]
                                 id_doc = i[0]
-                                print(id_doc, i)
-                            # print(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}')
                             list_question = os.listdir(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}')
                             for question in list_question:
                                 if is_file(question) and is_question(question):
-                                    print(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}/{question}', doc_and_file, id_doc)
                                     if is_multi_choice(question):
                                         type = 'multi choice'
                                     if is_long_response(question):
@@ -96,4 +96,4 @@ if __name__ == '__main__':
     get_data()
     db.insert_one_row('account', username=20160320, password='1')
     db.insert_one_row('point', user=1, point=0)
-    db.insert_one_row('point_detail', user=1, point=0, detail=1)
+    db.insert_one_row('point_detail', user=1, topic_1=0)
