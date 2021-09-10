@@ -1,8 +1,9 @@
-from getFPathImage import database
 from getFPathImage import *
+from ams_s3 import *
 
 
 db = database()
+ams = Aws()
 base = 'static'
 base_url = 'http://127.0.0.1:8000'
 
@@ -50,13 +51,22 @@ def get_data():
                             type = 'multi choice'
                         if is_long_response(doc_and_file):
                             type = 'long response'
+
+                        url = ams.upload_file(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}')
+                        if type == 'long response':
+                            try:
+                                a = ams.upload_file(
+                                    ams.upload_file(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file[: -4]}M.png')
+                                )
+                            except:
+                                pass
                         db.insert_one_question(
                             subject=subjec[0],
                             topic=topic[0],
                             document=doc,
                             question=convert_question_name(doc_and_file),
                             type=type,
-                            link=f'{base_url}/{base}/{subjec[1]}/{topic[1]}/{doc_and_file}'
+                            link=url
                         )
 
                     if not is_file(doc_and_file):
@@ -71,16 +81,27 @@ def get_data():
                                         type = 'multi choice'
                                     if is_long_response(question):
                                         type = 'long response'
+                                    url = ams.upload_file(f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}/{question}')
+                                    if type == 'long response':
+                                        try:
+                                            a = ams.upload_file(
+                                                f'{base}/{subjec[1]}/{topic[1]}/{doc_and_file}/{question[:-4]}M.png'
+                                            )
+                                        except:
+                                            pass
+
                                     db.insert_one_question(
                                         subject=subjec[0],
                                         topic=topic[0],
                                         document=get_id_by_name(doc_and_file, list_doc),
                                         question=convert_question_name(question),
                                         type=type,
-                                        link=f'{base_url}/{base}/{subjec[1]}/{topic[1]}/{doc_and_file}/{question}'
+                                        link=url
                                     )
             except:
                 pass
+
+    ams.set_public()
 
 
 def get_id_by_name(name, list_data):
