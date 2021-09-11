@@ -26,14 +26,14 @@ def get_all_document():
 def get_point_db(id_student):
     db = database()
     point = db.select_one('point', id_student)[0][2]
-    point_detail = db.select_one('point_detail', id_student)[0][0]
+    point_detail = db.select_one('point_detail', id_student)
     return {'point': point, 'point_detail': point_detail}
 
 
 def check_ans_and_update_row(id_student, result_student, id_question):
     db = database()
     answer = db.select_one('question', id_question)[0][6][-5: -4]
-    point = int(get_point(id_student))
+    point = int(get_point_db(id_student)['point'])
     if result_student == answer:
         point += 1
     db.update_one_row_by_field('point', 'user', 1, point=point)
