@@ -35,6 +35,11 @@ async def get_document():
     return get_all_document()
 
 
+@app.get('/point/{id}')
+async def get_point(id: int):
+    return get_point_db(id)
+
+
 @app.get('/receive/{id_student}/{result_student}/{id_question}')
 async def receive(id_student, result_student, id_question):
     check_ans_and_update_row(id_student, result_student, id_question)

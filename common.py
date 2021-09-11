@@ -23,10 +23,11 @@ def get_all_document():
     return data
 
 
-def get_point(id_student):
+def get_point_db(id_student):
     db = database()
     point = db.select_one('point', id_student)[0][2]
-    return point
+    point_detail = db.select_one('point_detail', id_student)[0][0]
+    return {'point': point, 'point_detail': point_detail}
 
 
 def check_ans_and_update_row(id_student, result_student, id_question):
