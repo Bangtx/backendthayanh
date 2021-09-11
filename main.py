@@ -40,6 +40,11 @@ async def get_point(id: int):
     return get_point_db(id)
 
 
+@app.get('/sum_topic')
+async def get_sum_topic():
+    return get_sum_question_of_topic()
+
+
 @app.get('/receive/{id_student}/{result_student}/{id_question}')
 async def receive(id_student, result_student, id_question):
     check_ans_and_update_row(id_student, result_student, id_question)

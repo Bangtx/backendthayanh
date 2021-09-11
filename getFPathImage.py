@@ -151,9 +151,16 @@ class database:
         for i in list_topic:
             create += f'`topic_{i}` INTEGER, '
         sql = f"CREATE TABLE IF NOT EXISTS `point_detail` ( {create}`id` INTEGER PRIMARY KEY, `user` INTEGER NOT NULL)"
-        print(sql)
         cursor.execute(sql)
         self.db.commit()
+
+    def get_sum_question_of_topic(self, id_question):
+        cursor = self.db.cursor()
+        sql = f"SELECT * FROM `question` WHERE `topic` = {id_question}"
+        cursor.execute(sql)
+        result = len(cursor.fetchall())
+        self.db.commit()
+        return result
 
 
 def is_file(fileName):

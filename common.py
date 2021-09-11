@@ -30,6 +30,17 @@ def get_point_db(id_student):
     return {'point': point, 'point_detail': point_detail}
 
 
+def get_sum_question_of_topic():
+    db = database()
+    data = get_all_topic()
+    data = json.loads(data)
+    result = list()
+    for i in data:
+        result.append(db.get_sum_question_of_topic(i[0]))
+    print(result)
+    return result
+
+
 def check_ans_and_update_row(id_student, result_student, id_question):
     db = database()
     answer = db.select_one('question', id_question)[0][6][-5: -4]
@@ -80,3 +91,4 @@ def check_user_and_pass(user, passw):
 #
 #
 # test('test', key='bang', value=65, point=4)
+get_sum_question_of_topic()
